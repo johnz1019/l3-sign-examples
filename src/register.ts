@@ -1,6 +1,6 @@
 import {createHash} from 'crypto';
 import {soliditySha3} from 'web3-utils';
-import * as NodeRSA from 'node-rsa';
+import NodeRSA from 'node-rsa';
 import './string';
 import {ActionType, k1PersonalSign, rsaSign} from './utils';
 
@@ -14,9 +14,12 @@ rsaKey.setOptions({signingScheme: 'pkcs1-sha256'});
 const k1PrivateKey =
   '0xa1e3ce382dafebc4ed9a9efc7d771f669745e2a88b33f2b5eb4efa8c47721346';
 
-const email = 'johnz@lay2.dev';
-const username = 'johnz';
-const source = 'unipass-wallet';
+// const email = 'iwangyang@qq.com';
+// const username = 'iwangyang';
+const email = 'hi.ellen@qq.com';
+const username = 'code';
+// const source = 'unipass-wallet';
+const source = '';
 
 // sha256 hash
 const emailHash = createHash('sha256').update(email).digest('hex');
@@ -24,6 +27,7 @@ const usernameHash = createHash('sha256').update(username).digest('hex');
 
 console.log('emailHash', emailHash);
 console.log('usernameHash', usernameHash);
+console.log('source', Buffer.from(source, 'utf-8').toString('hex'));
 
 // hash 计算方法
 const hash: string = soliditySha3(
@@ -33,9 +37,17 @@ const hash: string = soliditySha3(
   {v: source, t: 'string'}
 )!;
 
+
 console.log('hash', hash);
 const k1Sig = k1PersonalSign(hash, k1PrivateKey);
 console.log('k1Sig', k1Sig);
 
 const rsaSig = rsaSign(hash, rsaKey);
 console.log('rsaSig', rsaSig);
+
+let emails = [
+  '0xa1e3ce382dafebc4ed9a9efc7d771f669745e2a88b33f2b5eb4efa8c47721346',
+  '0xa1e3ce382dafebc4ed9a9efc7d771f669745e2a88b33f2b5eb4efa8c47721346',
+];
+
+let emailsBytes = '0x' + emails.map(x => x.replace('0x', '')).join();

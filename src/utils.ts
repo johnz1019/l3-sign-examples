@@ -1,3 +1,4 @@
+import {recoverPersonalSignature} from '@metamask/eth-sig-util';
 import {ecsign, hashPersonalMessage, toRpcSig} from 'ethereumjs-util';
 import * as NodeRSA from 'node-rsa';
 import './string';
@@ -25,4 +26,17 @@ export function k1PersonalSign(hash: string, privateKey: string) {
 export function rsaSign(hash: string, key: NodeRSA) {
   const sig = key.sign(hash.hexToBuffer(), 'hex');
   return sig;
+}
+
+export function k1PersonalVerify(
+  message: string,
+  sig: string,
+  address: string
+): boolean {
+  const recoveredAddress = recoverPersonalSignature({
+    data: message,
+    signature: sig,
+  });
+
+  return recoveredAddress.toLowerCase() === address.toLowerCase();
 }
